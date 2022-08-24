@@ -1,20 +1,22 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import userFormSchema from "./schemas/userFormSchema";
+import { saveUserData } from "./slices/userFormSlice";
 
 export default function App() {
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm({
     mode: "onTouched",
     reValidateMode: "onBlur",
     resolver: yupResolver(userFormSchema),
   });
-
-  console.count("app rerender");
 
   const handleOnSubmit = (evt) => {
     console.log(evt);
@@ -84,6 +86,23 @@ export default function App() {
 
           <Grid item xs={12}>
             <Button type="submit">Submit</Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button onClick={() => dispatch(saveUserData(getValues()))}>
+              Save to redux
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              onClick={() => {
+                userFormSchema
+                  .validate(getValues(), { abortEarly: false })
+                  // .then((valid) => console.log(valid))
+                  .catch((err) => console.log(err.name, err.errors));
+              }}
+            >
+              Validate via redux data
+            </Button>
           </Grid>
         </Grid>
       </Box>

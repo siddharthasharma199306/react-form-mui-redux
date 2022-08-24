@@ -1,6 +1,11 @@
 import * as yup from "yup";
 
-const userFormSchema = yup.object().shape({
+export const userFormSchema = {
+  username: "",
+  age: null,
+  email: "",
+};
+const userFormSchemaYup = yup.object().shape({
   username: yup.string().required("Username is required"),
   age: yup
     .number()
@@ -17,4 +22,4 @@ const userFormSchema = yup.object().shape({
     .email("Please enter a valid email"),
 });
 
-export default userFormSchema;
+export default userFormSchemaYup;
